@@ -1,0 +1,17 @@
+{
+  "projectName": "Export/@title",
+  "environments": "Export/Rooms/Room",
+  "environmentName": "@label",
+  "items": "Parts/Part",
+  "code": "SKU",
+  "description": "@desc",
+  "quantity": "@q",
+  "unit": "@unit",
+  "cost": "@purchase",
+  "sale": "@selling",
+  "numberFormat": "decimal-point",
+  "metadata": {
+    "supplier": "@supplier",
+    "height": "Size/@height"
+  }
+}

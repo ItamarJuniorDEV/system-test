@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EXEMPLO SINTETICO. Tags alternativas, sem compatibilidade Promob declarada. -->
+<Export title="Projeto alternativo">
+  <Rooms>
+    <Room label="Escritório">
+      <Parts>
+        <Part desc="Tampo" q="1.125" unit="M2" purchase="1.20" selling="2.50" supplier="Fornecedor de exemplo">
+          <SKU>0009</SKU>
+          <Size height="18" />
+        </Part>
+      </Parts>
+    </Room>
+  </Rooms>
+</Export>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EXEMPLO SINTETICO para demonstrar o mapeamento deste aplicativo.
+     Nao e um arquivo Promob real nem um padrao Promob homologado. -->
+<project name="Apartamento exemplo sintético">
+  <environments>
+    <environment name="Cozinha">
+      <items>
+        <item code="0001">
+          <description>Armário &amp; bancada</description>
+          <quantity>2,500</quantity>
+          <unit>UN</unit>
+          <unitCost>1.234,56</unitCost>
+          <unitSale>2.345,67</unitSale>
+        </item>
+      </items>
+    </environment>
+    <environment name="Dormitório">
+      <items>
+        <item code="0002">
+          <description>Prateleira</description>
+          <quantity>1</quantity>
+          <unit>UN</unit>
+          <unitCost>10,00</unitCost>
+          <unitSale>20,00</unitSale>
+        </item>
+      </items>
+    </environment>
+  </environments>
+</project>
