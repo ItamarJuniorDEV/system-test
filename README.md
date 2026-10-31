@@ -28,9 +28,10 @@ O registro de assinatura é uma confirmação operacional; assinatura digital ex
 
 Requisito: **Node.js 22.13 ou superior**. O `package-lock.json` fixa as dependências utilizadas.
 
-Abra a pasta do projeto extraída do arquivo entregue ou clonada do repositório quando o envio remoto estiver disponível:
+Clone o repositório ou abra a pasta do projeto extraída do arquivo entregue:
 
 ```bash
+git clone https://github.com/ItamarJuniorDEV/system-test.git
 cd system-test
 npm ci
 npm run demo
@@ -154,7 +155,7 @@ npm run test:e2e
 
 Os testes de banco executam as migrações SQL e papéis/RLS em PGlite. Isso verifica as regras SQL nesse ambiente; não substitui testes de Auth, PostgREST, latência, concorrência entre sessões e configuração do projeto Supabase hospedado. O build usa Webpack, pois o Turbopack encontrou uma restrição de subprocessos no ambiente de execução utilizado.
 
-Resultados executados: **120 testes de domínio/banco e 3 testes de navegador passaram**, assim como lint, TypeScript e build de produção. Evidências e limites: [validação](docs/validacao.md). Pendências de homologação e envio remoto: [estado atual](docs/estado-atual.md).
+Resultados executados: **120 testes de domínio/banco e 3 testes de navegador passaram**, assim como lint, TypeScript e build de produção. Evidências e limites: [validação](docs/validacao.md). Registro da publicação e pendências de homologação: [estado atual](docs/estado-atual.md).
 
 ## Mapa completo e sequência de evolução
 

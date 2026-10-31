@@ -48,12 +48,17 @@ Duas revisões independentes examinaram regras/especificação e segurança. For
 
 O defeito de envio tardio foi reproduzido antes da migração 008; o cenário passou depois. As revisões finais delimitadas não identificaram bloqueadores nas correções examinadas. Isso não equivale a uma garantia de ausência de defeitos em produção.
 
+## Publicação do código
+
+Publicação confirmada em 30/10/2026 (America/Sao_Paulo), pela API do GitHub, no commit `ae2456ee0e8fbc900d9b52c479b86dbd29eaef8f`, branch `main` de `ItamarJuniorDEV/system-test`. A árvore `f20df647d551b079c63bade1367108c656aac105` corresponde à implementação local `e0a1bed`: após `git fetch`, `git diff` não encontrou diferenças nos 107 arquivos. O SHA do commit mudou porque a API criou um novo commit.
+
+O acesso foi liberado pelo usuário incluindo o repositório na instalação. O registro documental posterior altera somente a documentação. As datas originais dos testes acima usam UTC. A conferência do remoto não substitui implantação e homologação.
+
 ## Ainda não verificado
 
 - Projeto Supabase real: aplicar as migrações, validar Auth por senha, renovação de sessão, PostgREST, chave privada de importação, RLS pela API e configuração de implantação.
 - Concorrência em sessões PostgreSQL independentes, especialmente reserva de saldo, fechamento de projeto e repetição simultânea de comandos. O banco contém bloqueios; a validação hospedada ainda precisa ocorrer.
 - XML real do exportador do usuário. As fixtures são sintéticas e não demonstram compatibilidade universal com Promob.
 - Homologação dos operadores, carga de produção, recuperação operacional e recursos avançados que permanecem no plano.
-- Push remoto: integração GitHub respondeu 403 e o Git local não tem credencial. Não existe confirmação de commit remoto nesta entrega.
 
 Para retomar, usar [estado atual](estado-atual.md), [plano do núcleo](planos/2026-10-31-nucleo-erp.md) e [ordem das próximas fases](planos/ordem-de-implementacao.md).

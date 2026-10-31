@@ -2,6 +2,8 @@
 
 Atualização: 31/10/2026. Execução pela IA, com escopo e envio ao repositório autorizados por Itamar. A compreensão e homologação do usuário ainda não foram avaliadas.
 
+Registro de publicação: 30/10/2026, no fuso America/Sao_Paulo. As datas das verificações anteriores usam UTC.
+
 ## Objetivo e resultado
 
 O mapa completo foi usado para iniciar o ERP em `ItamarJuniorDEV/system-test`: uma loja, sem fiscal, TypeScript/Next.js/Supabase e importação XML vinculada ao ambiente. A aplicação contém um núcleo comercial e operacional com tela, validação e funções transacionais PostgreSQL, além do plano das extensões.
@@ -23,7 +25,7 @@ O mapa reúne **14 blocos e 115 funcionalidades**. Isso é escopo documentado, n
 
 ## Evidência de verificação
 
-Verificação final em 31/10/2026, com Node.js 24.22.1 e dependências do lockfile:
+Verificação final em 31/10/2026 UTC, com Node.js 24.22.1 e dependências do lockfile:
 
 | Verificação | Resultado observado |
 | --- | --- |
@@ -37,9 +39,11 @@ As correções de revisão incluem importação persistida apenas pelo servidor 
 
 ## Situação do envio ao GitHub
 
-O usuário autorizou explicitamente o push para `https://github.com/ItamarJuniorDEV/system-test`. O envio pela integração foi recusado pelo GitHub com **403 — Resource not accessible by integration**. O teste de push pelo Git local também falhou por ausência de credencial (`could not read Username for 'https://github.com'`).
+O código foi publicado na branch `main` de `https://github.com/ItamarJuniorDEV/system-test` pela API do GitHub, após a liberação do repositório na instalação pelo usuário. Commit remoto da implementação: `ae2456ee0e8fbc900d9b52c479b86dbd29eaef8f`.
 
-Nenhum push foi confirmado. A implementação será preservada em commit local e em um pacote com código e Git bundle. Para concluir o envio, disponibilizar uma conexão GitHub com escrita nesse repositório; não é necessário repetir a autorização do usuário. O envio deve ser normal, sem `--force`, seguido da conferência do SHA remoto.
+A árvore `f20df647d551b079c63bade1367108c656aac105` foi conferida com `git fetch` e `git diff`: os 107 arquivos correspondem integralmente ao conteúdo do commit local `e0a1bed048ecfd892b601220a1d332c37e0e9640`. Os hashes dos commits diferem porque a publicação pela API criou um novo commit. O histórico local original foi preservado na branch `archive/implementacao-inicial` e no pacote entregue; a branch local `main` acompanha `origin/main`.
+
+O erro 403 anterior foi resolvido ao incluir `system-test` no acesso da instalação. A atualização da branch remota foi feita sem `force`, conferindo o SHA anterior. A publicação do código não representa implantação da aplicação nem homologação do Supabase hospedado. O commit documental posterior registra esse resultado e não altera o código validado.
 
 ## Limites atuais
 
@@ -52,8 +56,7 @@ Nenhum push foi confirmado. A implementação será preservada em commit local e
 
 ## Próximas ações após esta entrega
 
-1. Resolver o acesso de escrita ao repositório e enviar o commit preservado; conferir que `origin/main` aponta para o mesmo SHA.
-2. Conectar o projeto Supabase e homologar o XML real, conforme o critério abaixo.
+1. Conectar o projeto Supabase e homologar o XML real, conforme o critério abaixo.
 
 Conectar o projeto Supabase escolhido e homologar um XML real de um ambiente, comparando manualmente códigos, variações, quantidades e valores com o exportador. Critério: importação/reimportação corretas, sem mistura de ambientes, com contrato anterior preservado e resultados confirmados pelo operador.
 

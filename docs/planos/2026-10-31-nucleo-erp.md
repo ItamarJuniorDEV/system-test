@@ -82,10 +82,11 @@
 - [x] Revisar permissões, imutabilidade, valores, idempotência e bloqueio de demonstração em produção.
 - [x] Corrigir defeitos encontrados e repetir apenas as verificações afetadas.
 - [x] Registrar resultado real e pendências em `docs/validacao.md` e `docs/estado-atual.md`.
-- [ ] Enviar o commit ao repositório autorizado e conferir o SHA remoto. Bloqueado: GitHub 403 por acesso da integração; Git local sem credencial. Preservar commit local e Git bundle para concluir quando a conexão tiver escrita.
+- [x] Publicar o código no repositório autorizado e conferir a equivalência da árvore: commit remoto `ae2456ee0e8fbc900d9b52c479b86dbd29eaef8f`, árvore `f20df647d551b079c63bade1367108c656aac105`, correspondente à implementação local `e0a1bed`. Publicação pela API do GitHub após liberação do acesso, sem force.
 
 ## Decisões de execução
 
 - 31/10/2026: divisão de trabalho por propriedade de arquivos (parser, banco, mapa e aplicação) para permitir trabalho paralelo sem sobrescritas.
 - 31/10/2026: formato oficial de XML ainda não recebido; mapeamento configurável e exemplo sintético evitam declarar compatibilidade não verificada.
 - 31/10/2026: ambiente não dispõe de Docker/Postgres CLI; PGlite permite executar regras SQL reais, sem representar esse resultado como homologação do Supabase hospedado.
+- 30/10/2026 (America/Sao_Paulo): acesso ao GitHub liberado e implementação publicada pela API. O commit remoto possui SHA próprio; a equivalência dos arquivos foi verificada pelo SHA da árvore. As datas anteriores deste plano usam UTC.
