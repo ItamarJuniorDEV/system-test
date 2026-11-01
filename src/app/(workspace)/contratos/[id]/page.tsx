@@ -13,7 +13,11 @@ import type {
   EnvironmentVersion,
   BudgetItem,
 } from "@/lib/domain";
-import { brl, date, quantity } from "@/lib/format";
+import { brl, date } from "@/lib/format";
+import {
+  compareTechnicalReview,
+  assertComparisonTotals,
+} from "@/lib/review-comparison";
 import {
   PageHeader,
   Section,
@@ -25,16 +29,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ActionForm } from "@/components/action-form";
 import { PrintButton } from "@/components/print-button";
-
-type ReviewSnapshot = {
-  environments: {
-    environmentId: string;
-    name: string;
-    versionId: string;
-    versionNumber: number;
-    snapshot: EnvironmentVersion["snapshot"];
-  }[];
-};
+import { ReviewComparison } from "@/components/review-comparison";
 
 export default async function ContractPage({
   params,
@@ -100,6 +95,51 @@ export default async function ContractPage({
   const fullyApproved = approvals.every((a) => a.at);
   const currentReview = reviews.find((r) => r.status !== "superseded");
   const activeOrders = orders.filter((o) => o.status !== "cancelled");
+  let comparison: ReturnType<typeof compareTechnicalReview> | null = null;
+  let comparisonError = "";
+  let versionNumbers: Record<string, number> = {};
+  if (currentReview) {
+    try {
+      const result = compareTechnicalReview(
+        budgetItems,
+        currentReview.snapshot,
+      );
+      assertComparisonTotals(result, {
+        contractSaleCents: contract.total_cents,
+        reviewSaleCents: currentReview.sale_cents,
+        reviewCostCents: currentReview.cost_cents,
+        differenceCents: currentReview.difference_cents,
+      });
+      const versionIds = [
+        ...new Set(result.environments.flatMap((e) => e.beforeVersionIds)),
+      ];
+      const versions = await Promise.all(
+        versionIds.map(async (versionId) => {
+          const [version] = await list<
+            Pick<EnvironmentVersion, "id" | "version_number">
+          >("environment_versions", {
+            filters: { id: versionId },
+            columns: "id,version_number",
+            limit: 1,
+          });
+          if (!version)
+            throw new Error(
+              "Uma versão contratada não está disponível para conferência.",
+            );
+          return version;
+        }),
+      );
+      versionNumbers = Object.fromEntries(
+        versions.map((version) => [version.id, version.version_number]),
+      );
+      comparison = result;
+    } catch (error) {
+      comparisonError =
+        error instanceof Error
+          ? error.message
+          : "Não foi possível conferir os itens desta revisão.";
+    }
+  }
   return (
     <>
       <PageHeader
@@ -179,7 +219,7 @@ export default async function ContractPage({
             ))}
           </div>
         </Section>
-        <div className="content-grid">
+        <div className="content-grid contract-layout">
           <div className="stack">
             <Section
               title="Revisão executiva"
@@ -250,48 +290,23 @@ export default async function ContractPage({
                       separada, ainda prevista no mapa.
                     </Notice>
                   )}
-                  <details className="details-block">
-                    <summary>Conferir ambientes e itens da revisão</summary>
-                    <div>
-                      {(
-                        currentReview.snapshot as ReviewSnapshot
-                      ).environments.map((e) => (
-                        <div className="mt" key={e.environmentId}>
-                          <div className="space-between">
-                            <h3>{e.name}</h3>
-                            <Badge>Versão {e.versionNumber}</Badge>
-                          </div>
-                          <div className="table-wrap">
-                            <table>
-                              <thead>
-                                <tr>
-                                  <th>Código</th>
-                                  <th>Descrição</th>
-                                  <th>Qtd.</th>
-                                  <th>Venda unit.</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {e.snapshot.items.map((item, i) => (
-                                  <tr key={i}>
-                                    <td>{item.code}</td>
-                                    <td>{item.description}</td>
-                                    <td>
-                                      {quantity(item.quantity)} {item.unit}
-                                    </td>
-                                    <td>{brl(item.saleCents)}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </details>
+                  {comparison ? (
+                    <ReviewComparison
+                      key={currentReview.id}
+                      comparison={comparison}
+                      versionNumbers={versionNumbers}
+                    />
+                  ) : (
+                    <Notice tone="warning">
+                      A comparação não está disponível. {comparisonError} A
+                      aprovação nesta tela depende de uma conferência completa.
+                    </Notice>
+                  )}
                   {currentReview.status !== "approved" &&
+                    comparison !== null &&
                     can(viewer, "operations") && (
                       <ActionForm
+                        key={`review-approval:${currentReview.id}`}
                         command="review.approve"
                         submitLabel="Aprovar revisão executiva"
                       >
@@ -379,7 +394,7 @@ export default async function ContractPage({
               </Section>
             )}
           </div>
-          <div className="stack">
+          <div className="contract-related">
             <Section title="Ambientes vinculados">
               <div className="item-list">
                 {environments.map((e) => (

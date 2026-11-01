@@ -1,8 +1,8 @@
-# Evidências da entrega inicial
+# Evidências de validação
 
-Data: 31/10/2026. Escopo: núcleo operacional para uma loja, sem fiscal nem multitenancy. Os resultados abaixo registram verificações executadas; não representam homologação de todas as 115 funcionalidades do mapa.
+Entrega inicial: 31/10/2026. Evolução da comparação: 01/11/2026. Escopo: núcleo operacional para uma loja, sem fiscal nem multitenancy. Os resultados registram verificações executadas em cada data; não representam homologação de todas as 115 funcionalidades do mapa.
 
-## Ambiente e comandos
+## Entrega inicial: ambiente e comandos
 
 Node.js 24.22.1, npm 11.9.0, Next.js 16.4.3, React 19.3.1, Vitest 4.1.12, PGlite e Playwright. Dependências reproduzíveis por `npm ci` usando o lockfile versionado.
 
@@ -53,6 +53,39 @@ O defeito de envio tardio foi reproduzido antes da migração 008; o cenário pa
 Publicação confirmada em 30/10/2026 (America/Sao_Paulo), pela API do GitHub, no commit `ae2456ee0e8fbc900d9b52c479b86dbd29eaef8f`, branch `main` de `ItamarJuniorDEV/system-test`. A árvore `f20df647d551b079c63bade1367108c656aac105` corresponde à implementação local `e0a1bed`: após `git fetch`, `git diff` não encontrou diferenças nos 107 arquivos. O SHA do commit mudou porque a API criou um novo commit.
 
 O acesso foi liberado pelo usuário incluindo o repositório na instalação. O registro documental posterior altera somente a documentação. As datas originais dos testes acima usam UTC. A conferência do remoto não substitui implantação e homologação.
+
+## Evolução de 01/11/2026: comparação da revisão
+
+Referência: [spec e critérios de pronto](planos/2026-11-01-comparacao-revisao.md). O método do PDF foi aplicado à análise, especificação, revisão independente e implementação de uma fatia do bloco 04. SQL, permissões de gravação, contrato original e regras de aprovação não foram alterados.
+
+| Verificação executada | Resultado |
+| --- | --- |
+| `npm test -- tests/review-comparison.test.ts` | **44 testes passaram**: identidades, duplicatas, reordenação, ambiguidades, campos/metadados, imutabilidade, precisão, limites e conciliação oficial. |
+| `npm test -- tests/money.test.ts` | **21 testes passaram**, incluindo seis casos de exibição que preservam centavos de valores grandes e negativos. |
+| `npm run lint` e lint dos novos arquivos | Exit code 0. |
+| `npm run typecheck` | Exit code 0, incluindo os novos testes. |
+| `npm run build` | Exit code 0; compilação, tipos, rotas e otimização de produção concluídos. |
+| Cenários de `tests/e2e/core-workflow.spec.ts` | **2 passaram**: fluxo operacional completo e navegação mobile existente. |
+| `npm run test:e2e -- tests/e2e/review-comparison.spec.ts` | **1 passou na execução final**, com Chrome configurado pela variável abaixo; inclui valores, paginação, mobile, snapshot salvo, recusa de revisão desatualizada e reinício do aceite. Nenhum erro de página ou do console do navegador. |
+| Revisão independente da spec e do diff | Sem bloqueadores remanescentes no recorte. Limite executivo, conciliação dos totais, clareza do seletor, layout e identidade do formulário por revisão foram conferidos. |
+
+Os **65 testes focados** acima foram executados nesta evolução. A suíte completa de 120 casos registrada na entrega inicial não foi repetida integralmente por uma alteração de leitura e apresentação. Os casos novos não são contados como funcionalidades completas do mapa.
+
+A comparação usa as ocorrências preservadas, sem juntar itens somente pelo código. Duas linhas de meia unidade vendidas a um centavo cada somam dois centavos após o arredondamento por linha; intermediários monetários grandes usam inteiros. O teste de limite exercita 10.000 itens de cada lado e 20.000 linhas de resultado sem truncamento. A formatação em BRL também evita perder o último centavo pela divisão de um número grande em ponto flutuante.
+
+### Ambiente de navegador desta evolução
+
+A primeira tentativa não chegou aos cenários: o executável temporário usado anteriormente não existia mais. O instalador padrão do Playwright recebeu uma página HTML no lugar do ZIP. Foi obtida a distribuição oficial **Chrome for Testing 156.0.8078.80**, mantendo proxy e TLS, sem alterar dependências ou lockfile. Caminho temporário nesta sessão: `/tmp/system-test-browsers/chrome-headless-shell-156.0.8078.80/chrome-headless-shell-linux64/chrome-headless-shell`.
+
+```bash
+PLAYWRIGHT_CHROMIUM_EXECUTABLE=/tmp/system-test-browsers/chrome-headless-shell-156.0.8078.80/chrome-headless-shell-linux64/chrome-headless-shell npm run test:e2e -- tests/e2e/review-comparison.spec.ts
+```
+
+Na execução integrada, os dois cenários existentes passaram e o cenário novo identificou transbordamento da página em 390 px. O mínimo automático da grade propagava a largura da tabela. A correção dá largura completa à revisão e permite encolher a grade externa, preservando a rolagem interna. A repetição passou e demonstrou acesso à última coluna. Foram inspecionadas capturas de computador e celular.
+
+O formulário de aceite também passou a ter identidade própria por revisão: atualizar o snapshot reinicia checkbox e justificativa. A revisão independente identificou uma colisão de chaves no primeiro ajuste; a chave foi diferenciada da comparação. Depois de congelar essa correção, o build e o cenário completo passaram novamente, incluindo a checagem de console sem erros.
+
+O caso executado usa 54 linhas comparadas, páginas de 50 e 4, com 51 itens equivalentes. Confere um contrato de R$ 250,00 e revisão de R$ 350,00; uma importação posterior de R$ 500,00 não altera a comparação salva nem permite aprová-la desatualizada. Depois de atualizar, conferir novamente e aprovar, contrato e orçamento continuam em R$ 250,00. Todas as operações do cenário usam a interface e dados sintéticos no PGlite; não é homologação do Supabase hospedado.
 
 ## Ainda não verificado
 

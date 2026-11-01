@@ -3,8 +3,20 @@ const money = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
 });
 const quantities = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 4 });
+const wholeAmounts = new Intl.NumberFormat("pt-BR", {
+  maximumFractionDigits: 0,
+});
 
 export function brl(cents: number | string | null | undefined): string {
+  const text = String(cents ?? 0);
+  // Preserve every persisted cent, including totals near the database limit.
+  // Dividing large integers by 100 as Number can change the displayed cent.
+  if (/^-?\d+$/.test(text)) {
+    const value = BigInt(text);
+    const absolute = value < 0n ? -value : value;
+    const fraction = String(absolute % 100n).padStart(2, "0");
+    return `${value < 0n ? "-" : ""}R$\u00a0${wholeAmounts.format(absolute / 100n)},${fraction}`;
+  }
   return money.format(Number(cents ?? 0) / 100);
 }
 

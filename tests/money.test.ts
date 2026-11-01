@@ -1,5 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { parseMoney } from "../src/lib/format";
+import { brl, parseMoney } from "../src/lib/format";
+
+describe("exibição exata de centavos", () => {
+  it.each([
+    [1, "R$\u00a00,01"],
+    [-1, "-R$\u00a00,01"],
+    [586418, "R$\u00a05.864,18"],
+    ["8999999999999999", "R$\u00a089.999.999.999.999,99"],
+    ["-8999999999999999", "-R$\u00a089.999.999.999.999,99"],
+    [null, "R$\u00a00,00"],
+  ])("formata %s sem perder o último centavo", (cents, expected) => {
+    expect(brl(cents)).toBe(expected);
+  });
+});
 
 describe("valores monetários dos formulários", () => {
   it.each([

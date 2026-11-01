@@ -14,7 +14,7 @@ ERP para **uma loja de móveis**, construído do zero em **TypeScript, Next.js e
 | XML | Layout configurável, UTF-8, prévia, seleção explícita de um ambiente de origem e um destino, identificação de conteúdo, versão imutável e deduplicação. |
 | Orçamentos | Cópia das versões selecionadas, preços unitários, quantidades, custo e venda calculados em centavos no banco. |
 | Contratos | Origem no orçamento, assinatura registrada, liberações comercial/financeira independentes e previsão a receber. |
-| Revisão | Conferência da versão executiva, detecção de mudanças, bloqueio por diferença e aceite justificado de administrador. |
+| Revisão | Comparação dos itens contratados com a revisão salva por ambiente: incluídos, removidos, alterados e equivalentes, antes/depois de quantidades e valores, variantes, filtros e paginação. Conciliação com totais oficiais, bloqueio por diferença e aceite justificado de administrador. |
 | Compras | Pedidos por fornecedor, previsão a pagar, registro local de envio, recebimento parcial, cancelamento com pré-condições e nova revisão para reemissão. |
 | Estoque | Saldo físico, reserva explícita por contrato, disponibilidade, movimentos e consumo na entrega. |
 | Agenda | Entrega/montagem, bloqueio de sobreposição do responsável, entrega das reservas e montagem após entrega integral. |
@@ -155,7 +155,7 @@ npm run test:e2e
 
 Os testes de banco executam as migrações SQL e papéis/RLS em PGlite. Isso verifica as regras SQL nesse ambiente; não substitui testes de Auth, PostgREST, latência, concorrência entre sessões e configuração do projeto Supabase hospedado. O build usa Webpack, pois o Turbopack encontrou uma restrição de subprocessos no ambiente de execução utilizado.
 
-Resultados executados: **120 testes de domínio/banco e 3 testes de navegador passaram**, assim como lint, TypeScript e build de produção. Evidências e limites: [validação](docs/validacao.md). Registro da publicação e pendências de homologação: [estado atual](docs/estado-atual.md).
+Os resultados da entrega inicial e dos incrementos estão datados em [validação](docs/validacao.md), com comandos, ambiente, cobertura e limites. O registro da publicação e as pendências de homologação ficam em [estado atual](docs/estado-atual.md). Executar uma verificação local não comprova conexão ou operação em produção.
 
 ## Mapa completo e sequência de evolução
 
@@ -164,6 +164,7 @@ Comece por estes documentos:
 - [Escopo e decisões](docs/escopo.md)
 - [Mapa dos 14 blocos, regras e diagramas](docs/referencia/mapa-processos.md)
 - [Ordem de implementação e critérios de aceite](docs/planos/ordem-de-implementacao.md)
+- [Fatia de comparação da revisão e seus critérios verificáveis](docs/planos/2026-11-01-comparacao-revisao.md)
 - [Plano do núcleo inicial](docs/planos/2026-10-31-nucleo-erp.md)
 - [Catálogo das 395 referências, com metadados e hashes](docs/referencia/fontes.json)
 - [Estado atual e ponto de retomada](docs/estado-atual.md)
@@ -171,6 +172,8 @@ Comece por estes documentos:
 Permanecem nas próximas fases: negociação de descontos/parcelas/comissões, contratos complementares, demonstração e devolução de avulsos, compras avulsas e de assistência, inventário/transferências, equipes/capacidade/checklists, reagendamento, automações Enterprise, empreendimentos, integrações com fábricas/assinatura/bancos, ETL e indicadores avançados. O mapa também preserva o bloco Marketing no escopo efetivamente documentado.
 
 A interface foi construída para estes fluxos, com identidade visual própria. A fidelidade visual ao FoccoLOJAS exige referências das telas reais e validação separada.
+
+O método de evolução incorpora os princípios úteis de **Fábrica de Sistemas com IA**, fornecido pelo usuário: especificação em seis partes, revisão independente, implementação delimitada e evidências de verificação. A adaptação e as condições para operação real estão na ordem de implementação. O cronograma e os fornecedores do exemplo do livro não alteram a stack, o escopo nem as pendências deste ERP.
 
 ## Organização do código
 

@@ -977,6 +977,132 @@ select {
   margin: 0;
   overflow-wrap: anywhere;
 }
+.review-comparison {
+  min-width: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.content-grid.contract-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+.contract-layout > .stack {
+  min-width: 0;
+}
+.contract-related {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  align-items: start;
+  gap: 22px;
+  min-width: 0;
+}
+.review-comparison > div > .helper {
+  margin-top: 6px;
+}
+.review-counts,
+.review-version-labels,
+.review-pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+.review-counts span {
+  background: #f4f7fb;
+  border-radius: 6px;
+  padding: 7px 9px;
+}
+.review-environment {
+  min-width: 0;
+}
+.review-environment-header h4 {
+  font-size: 14px;
+  margin-bottom: 9px;
+  overflow-wrap: anywhere;
+}
+.review-version-labels {
+  color: #62758e;
+}
+.review-totals {
+  margin: 20px 0;
+}
+.review-result-count {
+  margin: 14px 0;
+}
+.review-comparison-table {
+  table-layout: fixed;
+  min-width: 700px;
+  white-space: normal;
+}
+.review-comparison-table th,
+.review-comparison-table td {
+  vertical-align: top;
+}
+.review-comparison-table th[scope="row"] {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+  background: white;
+}
+.review-comparison-table tr[data-status="added"] th[scope="row"] {
+  border-left: 3px solid #218663;
+}
+.review-comparison-table tr[data-status="removed"] th[scope="row"] {
+  border-left: 3px solid #c86255;
+}
+.review-comparison-table tr[data-status="changed"] th[scope="row"] {
+  border-left: 3px solid #bd8a36;
+}
+.review-item-heading {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.review-item-values {
+  display: grid;
+  gap: 9px;
+}
+.review-item-values dt {
+  color: #76869b;
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+.review-item-values dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.review-item-details {
+  margin-top: 12px;
+  font-size: 11px;
+}
+.review-item-details summary {
+  cursor: pointer;
+  color: #4f6683;
+}
+.review-item-description {
+  margin-top: 12px;
+}
+.review-item-description p,
+.review-item-description dl {
+  margin: 7px 0;
+}
+.review-item-description dd {
+  margin: 2px 0 8px;
+}
+.review-difference {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.review-pagination {
+  justify-content: space-between;
+  margin-top: 16px;
+}
 .flow-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

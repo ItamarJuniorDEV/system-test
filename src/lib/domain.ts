@@ -1,4 +1,7 @@
 export type Money = number | string;
+export type JsonValue =
+  string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+export type ItemMetadata = Record<string, JsonValue>;
 export type BaseRow = { id: string; created_at: string; created_by: string };
 export type Customer = BaseRow & {
   name: string;
@@ -26,7 +29,7 @@ export type VersionItem = {
   unit: string;
   costCents: number;
   saleCents: number;
-  metadata?: Record<string, string>;
+  metadata?: ItemMetadata;
 };
 export type EnvironmentVersion = BaseRow & {
   environment_id: string;
@@ -34,7 +37,13 @@ export type EnvironmentVersion = BaseRow & {
   file_name: string;
   sha256: string;
   import_fingerprint: string;
-  snapshot: { name: string; items: VersionItem[] };
+  snapshot: {
+    name: string;
+    items: VersionItem[];
+    sourceEnvironmentIndex?: number;
+    mapping?: Record<string, JsonValue>;
+    fingerprint?: string;
+  };
   cost_cents: Money;
   sale_cents: Money;
 };
@@ -49,10 +58,13 @@ export type BudgetItem = BaseRow & {
   budget_id: string;
   environment_id: string;
   environment_version_id: string;
+  source_item_index: number;
   supplier_id: string;
   code: string;
   description: string;
   unit: string;
+  variant_key: string;
+  metadata: ItemMetadata;
   quantity: number | string;
   unit_cost_cents: Money;
   unit_sale_cents: Money;
@@ -71,11 +83,21 @@ export type Contract = BaseRow & {
   financial_approved_at: string | null;
   cancellation_reason?: string | null;
 };
+export type ReviewSnapshot = {
+  environments: {
+    environmentId: string;
+    name: string;
+    supplierId: string;
+    versionId: string;
+    versionNumber: number;
+    snapshot: EnvironmentVersion["snapshot"];
+  }[];
+};
 export type TechnicalReview = BaseRow & {
   contract_id: string;
   revision_number: number;
   status: string;
-  snapshot: unknown;
+  snapshot: ReviewSnapshot;
   sale_cents: Money;
   cost_cents: Money;
   difference_cents: Money;

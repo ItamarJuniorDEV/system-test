@@ -256,6 +256,7 @@ export const PROCESS_MODULES: ProcessModule[] = [
       "A negociação da diferença pode bloquear alterações até assinatura ou cancelamento do complemento. Dividir exige percentuais totalizando 100%; unificar exige o mesmo contrato. Avulsos não devem herdar indiscriminadamente a revisão de planejados.",
       "Concluída Parcial aparece em ações do help, mas não em toda enumeração de estados; confirmar o comportamento antes de reproduzir.",
       "Não derivar estrutura interna do banco apenas do nome dos campos do help.",
+      "Comparação disponível entre itens do orçamento contratado e snapshot da revisão vigente, por ambiente, com versões, inclusões, remoções, alterações, variantes, quantidades e valores antes/depois. Filtro e paginação preservam os totais conciliados; correspondências ambíguas ficam explícitas. Seleção de qualquer par de revisões históricas, reativação e complementos continuam planejados.",
       "Núcleo desta fatia entregue parcialmente. A lista de funcionalidades descreve o mapa completo, não uma lista de entregas concluídas; extensões avançadas e conectores externos permanecem planejados.",
     ],
   },

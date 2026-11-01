@@ -4,7 +4,7 @@
 
 Entregar o escopo de uma loja em TypeScript/Next.js/Tailwind/Supabase, preservando os 14 blocos não fiscais do [mapa](../referencia/mapa-processos.md). A sequência abaixo é um **plano de implementação**, não um relatório de tarefas concluídas. O estado verificável de cada bloco é registrado em [process-map.ts](../../src/lib/process-map.ts).
 
-Cada fatia deve fechar uma operação com interface, regra, persistência, autorização, efeitos e auditoria pertinentes. Ao contrário de uma lista de telas, a conclusão exige resultado observado. Não é necessário esperar todas as funções de um módulo para entregar uma fatia útil; o bloco permanece `partial` enquanto houver cobertura declarada pendente.
+Cada fatia deve fechar uma operação com interface, regra, persistência, autorização, efeitos e auditoria pertinentes. A conclusão exige resultado observado. Não é necessário esperar todas as funções de um módulo para entregar uma fatia útil; o bloco permanece `partial` enquanto houver cobertura declarada pendente.
 
 ## Fases
 
@@ -22,25 +22,56 @@ As fases organizam dependências de entrega, não regras universais de operaçã
 
 ## Fluxo de trabalho por fatia
 
+Registrar uma spec curta em seis partes no plano existente, sem exigir um arquivo novo por tarefa. Declarar também o que fica fora da fatia, preservando o backlog completo.
+
+| Parte | Conteúdo mínimo |
+| --- | --- |
+| 1. Quem usa | Perfis autorizados e ações recusadas. A loja é única; a autorização depende do perfil e da operação. |
+| 2. O que cada um faz | Ator, entrada, estado inicial, ação, saída e efeitos em outros módulos. |
+| 3. Telas | Navegação e estados de carregamento, vazio, erro e sucesso pertinentes. |
+| 4. Dados | Entidades, vínculos, versões e valores preservados ou alterados. |
+| 5. Regras | Pré-condições, estados, exceções e limites numéricos; fonte e decisão adotada. |
+| 6. Critérios de pronto | Exemplos com dados e resultado observável, incluindo recusas e repetição quando aplicáveis. |
+
+Para cada regra material, registrar sua origem e o nível de evidência. Os rótulos podem coexistir; confirmação no código não equivale a homologação.
+
+| Rótulo | Evidência necessária |
+| --- | --- |
+| **Documentada** | ID/URL da fonte FoccoLOJAS, variante e parâmetros relevantes; registrar ambiguidades. |
+| **Adotada** | Decisão deste ERP, motivo e responsável pela decisão; explicitar diferenças da referência. |
+| **Confirmada no código** | Arquivo/função e verificação do comportamento observado, com ambiente e resultado. |
+| **Homologada** | Operador responsável, cenário, ambiente, data e resultado aceito; registrar diferenças pendentes. |
+
 ```mermaid
 flowchart TB
-  F["Fonte e caso de uso"] --> R["Regras e parâmetros"]
-  R --> A["Aceites com dados"]
-  A --> I["Implementação da fatia"]
-  I --> V{"Resultado verificado?"}
-  V -->|"não"| I
-  V -->|"sim"| H["Revisão e homologação"]
-  H --> D{"Pendências no bloco?"}
-  D -->|"sim"| P["Marcar partial e registrar lacunas"]
-  D -->|"não"| C["Marcar implemented com evidência"]
+  F["Fonte, origem e spec"] --> R["Revisão independente prévia"]
+  R -->|"lacuna material"| F
+  R -->|"aceites claros"| I["Implementação da fatia"]
+  I --> V["Testes e evidências"]
+  V --> H["Revisão independente da entrega"]
+  H -->|"correção necessária"| I
+  H -->|"resultado confirmado"| S["Registrar cobertura e homologação"]
+  S --> D{"Pendências no bloco?"}
+  D -->|"sim"| P["partial e lacunas"]
+  D -->|"não"| C["implemented com evidência"]
 ```
 
-1. **Fixar a referência:** apontar IDs/URLs, versão quando disponível e parâmetros relevantes. Usar [fontes.json](../referencia/fontes.json); não copiar os corpos dos manuais para o repositório.
-2. **Escrever o caso:** ator, entrada, estado inicial, ação, saída, efeitos em outros módulos e exceções. Distinguir comportamento documentado de decisão nova.
-3. **Definir aceites:** incluir resultado esperado com números quando houver saldo, quantidade ou valor. Resolver conflitos materiais do manual para a variante escolhida.
-4. **Implementar uma fatia:** conectar tela, regras, persistência e autorização. Função planejada fica identificada; nunca criar botão de sucesso para operação inexistente.
-5. **Verificar o risco concreto:** caminho normal, erro relevante, permissão e repetição; concorrência e reversão onde houver saldo ou obrigação. Não testar apenas se a tela abriu.
-6. **Revisar e registrar:** conferir a mudança contra fonte e escopo, registrar ambiente/comando/resultado observado e atualizar somente o status justificável.
+1. **Fixar a referência e a spec:** usar [fontes.json](../referencia/fontes.json), sem copiar os manuais. Incluir resultado numérico quando houver saldo, quantidade ou valor.
+2. **Revisar antes de implementar:** uma revisão independente aponta ambiguidades, contradições, lacunas e riscos materiais. Resolver os pontos da variante escolhida e registrar a decisão; dúvidas sem impacto na fatia ficam no backlog.
+3. **Implementar a operação:** conectar tela, regras, persistência, autorização e auditoria. Função planejada fica identificada; não criar botão de sucesso para operação inexistente.
+4. **Verificar o risco concreto:** caminho normal, erro relevante, permissão e repetição; concorrência e reversão onde houver saldo ou obrigação. Repetir ou ampliar testes para cobrir mudanças e riscos concretos, sem alterar o resultado esperado só para passar.
+5. **Revisar depois de implementar:** conferir o diff e as evidências contra spec, fonte, permissões e efeitos entre módulos. Corrigir os achados e repetir as verificações afetadas. Revisão por IA e testes locais não substituem homologação do operador.
+6. **Registrar e continuar:** salvar a versão, os resultados reais, limitações e próximo passo no registro já adotado. Atualizar somente o status justificável; homologação pendente permanece explícita.
+
+Credenciais, acesso ao ambiente ou XML real pendentes não bloqueiam trabalhos independentes: interface, regras, testes com dados sintéticos e revisão podem avançar. A integração permanece pendente até ser verificada no ambiente correspondente; não simular conexão ativa.
+
+O controle de precisão está nas entradas identificadas, regras explícitas, critérios de avanço e verificações reproduzíveis. Isso torna o processo auditável; não presume que a geração de código pela IA seja determinística ou que a concordância entre agentes comprove correção.
+
+## Adaptação do método do PDF
+
+Referência de método: **Fábrica de Sistemas com IA**, de **Matheus Battisti (Hora de Codar)**. As páginas físicas contam desde a capa; a página impressa é uma a menos. Aproveitamos spec e revisão independente (física 53 / impressa 52; 171 / 170), checklists verificáveis (172–174 / 171–173) e publicação, recuperação e observação da operação (130–134 / 129–133). A orientação para continuar trabalhos independentes enquanto falta acesso aparece em 87 / 86.
+
+O cronograma de sete dias é didático; não estima a entrega dos 14 blocos deste ERP. A indicação de Hostinger com link/cupom (121 / 120) e a integração Appmax (87 / 86) não definem fornecedores obrigatórios. Venda por assinatura e multitenancy (159–161 / 158–160) pertencem ao exemplo SaaS. Preservar a stack aprovada, loja única e exclusão fiscal. Aplicar o método nos documentos existentes, sem criar rituais ou novas confirmações para ações já autorizadas.
 
 ## Exemplos de aceite que atravessam módulos
 
@@ -78,6 +109,21 @@ Integração externa de longa duração exige contrato de estados e recuperaçã
 O frontend será próprio e o objetivo de proximidade visual deve ser avaliado separadamente do aceite funcional. Selecionar uma listagem rica, um detalhe com abas e uma ação com validação, observando navegação, estados vazios, erro, carregamento e responsividade. Screenshots isolados do help não cobrem todas as interações.
 
 Antes de usar “igual ao Focco” ou “100%”, registrar quais telas/estados foram comparados, quais referências foram fornecidas e quais diferenças permanecem. Até lá, usar “interface baseada no mapa funcional”.
+
+## Condições de entrada em operação
+
+Os itens abaixo são **critérios pendentes, não verificações executadas**. A evidência local já registrada não comprova Supabase hospedado, recuperação operacional ou homologação da loja. Eles condicionam o uso com dados reais, sem impedir o avanço das fatias independentes.
+
+| Condição | Evidência requerida para concluir |
+| --- | --- |
+| Supabase real | Migrações aplicadas; login, sessão e persistência pelo ambiente hospedado; chamadas PostgREST/RPC permitidas e recusadas conforme perfil, com RLS verificada pela API. Importação XML mantém chave privada no servidor e ator revalidado. |
+| XML real | Arquivo autorizado com exportador/layout identificados; códigos, variantes, quantidades e preços conferidos pelo operador; reimportação sem duplicação e contrato anterior preservado. |
+| Implantação e retorno | Commit e endereço publicados registrados; acesso HTTPS verificado; retorno a uma versão compatível exercitado em homologação. Registrar tratamento das migrações: voltar código não desfaz dados nem garante retorno seguro do banco. |
+| Backup e restauração | Frequência e retenção definidas pela perda de dados e interrupção toleradas pela loja; cópia protegida fora do ambiente de origem; restauração em banco separado com vínculos, contagens e saldos conferidos. GitHub não substitui backup dos dados. |
+| Saúde, logs e alerta | Verificação do aplicativo e banco; falha controlada em homologação detectada e aviso recebido; logs com retenção e correlação, sem segredos, XML bruto ou dados pessoais desnecessários. |
+| Operador da loja | Responsável, data e cenário registrados; operador conclui o fluxo principal e uma exceção relevante, com resultados conferidos e dúvidas restantes anotadas. |
+
+Não exigir cobrança externa para validar o financeiro interno: baixas e estornos desta fatia não movimentam bancos. Quando houver integração real, definir seu aceite e recuperação próprios. Manter a evidência e as pendências no registro de conclusão existente.
 
 ## Registro de conclusão e retomada
 
